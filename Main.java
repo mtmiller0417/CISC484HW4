@@ -26,7 +26,11 @@ public class Main{
 		initializeMV();
 		for(int i = 0; i < k; i++)
 			System.out.println("Mean : "+ means[i] + " variance: " + v[i]);
-    }
+
+		for(int i = 0; i < data.length; i++)
+			calcPrDensity(data[i], calcMean(data), 20);
+	}
+	
 
     public void initializeMV(){
 		means = new double[k];
@@ -74,7 +78,14 @@ public class Main{
         for(int i = 0; i < tmpArray.size(); i++){
             data[i] = tmpArray.get(i);
         }
-    }
+	}
+	
+	public double calcPrDensity(double x, double mean, double stdDev){
+		double pow = (-((x - mean) * (x - mean))) / (2 * (stdDev * stdDev));
+		double numerator = Math.pow(Math.E, pow);
+		double denominator = stdDev * Math.sqrt(2 * Math.PI);
+		return numerator / denominator;
+	}
 
     public double calcMean(double array[]){
         double sum = 0;
