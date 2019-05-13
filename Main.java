@@ -4,15 +4,25 @@ import java.util.*;
 public class Main{
     String fileName = "em_data.txt";
     double data[]; // Holds the data
+    int k;
 
     public static void main(String [] args){
         Main m = new Main(args);
     }
 
     public Main(String [] args){
+
+        if(args.length != 2)
+            error("Incorrect Usage! Instead use:\njava Main <filePath> <K>");
+
+        fileName = args[0];             // Set the fileName from the users input 
+        k = Integer.parseInt(args[1]);  // Set k as the users input
+
+
         readInFile(); // Read in data
+        System.out.println("K = " + k);
         System.out.println("Read in " + data.length + " data points");
-        System.out.println("Mean is " + calcMean(data));
+
     }
 
     public void readInFile(){
@@ -35,6 +45,7 @@ public class Main{
         }
     }
 
+    // Calculates the mean of the input 
     public double calcMean(double array[]){
         double sum = 0;
         int length = array.length;
@@ -42,5 +53,24 @@ public class Main{
             sum += d;
 
         return (sum/length);
+    }
+
+    // Calculates the variance of the input
+    public double calcVariance(double array[]){
+        double mean = calcMean(array);
+        double sum = 0;
+        for(double d : array)
+            sum += (d - mean)*(d - mean);
+        return sum/(array.length - 1);
+    }
+
+    // Calculates the standard deviation of the input
+    public double calcStdDev(double array[]){
+        return Math.sqrt(calcVariance(array));
+    }
+
+    public void error(String message){
+        System.out.println("ERROR: " + message);
+        System.exit(-1);
     }
 }
