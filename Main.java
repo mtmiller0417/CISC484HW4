@@ -4,27 +4,51 @@ import java.util.*;
 public class Main{
     String fileName = "em_data.txt";
     double data[]; // Holds the data
-    int k;
+    int k = 2;
+    double means[]; //Holds k means
+    double v[]; //holds k variances
 
     public static void main(String [] args){
         Main m = new Main(args);
     }
 
     public Main(String [] args){
-
-        if(args.length != 2)
-            error("Incorrect Usage! Instead use:\njava Main <filePath> <K>");
-
-        fileName = args[0];             // Set the fileName from the users input 
-        k = Integer.parseInt(args[1]);  // Set k as the users input
-
-
         readInFile(); // Read in data
-        System.out.println("K = " + k);
         System.out.println("Read in " + data.length + " data points");
-
+        System.out.println("Mean is " + calcMean(data));
+	initializeMV();
+	for(int i = 0; i < k; i++)
+		System.out.println("Mean : "+ means[i] + " variance: " + v[i]);
     }
 
+    public void initializeMV(){
+	means = new double[k];
+	v = new double[k];
+
+	double min = data[0];
+	double max = data[0];
+	for(int i =0; i < data.length; i++){
+		if (data[i] > max)
+			max =  data[i];
+		else if (data[i] < min)
+			min = data[i]; 
+	}
+
+	Random r = new Random();
+	for(int j = 0; j < k; j++){
+		means[j] = r.nextDouble()*(max - min)  + min;
+	}
+
+	for(int j = 0; j < k; j++){
+		v[j] = 0;
+		double sum = 0;
+		for (int i = 0; i < data.length; i++){
+			double diff = Math.pow((data[i] - means[j]), 2);
+			sum += diff;
+		}
+		v[j] = sum/(data.length -  1);
+	} 
+    }
     public void readInFile(){
         BufferedReader reader;
         ArrayList<Double> tmpArray = new ArrayList<Double>();
@@ -45,7 +69,6 @@ public class Main{
         }
     }
 
-    // Calculates the mean of the input 
     public double calcMean(double array[]){
         double sum = 0;
         int length = array.length;
@@ -53,24 +76,5 @@ public class Main{
             sum += d;
 
         return (sum/length);
-    }
-
-    // Calculates the variance of the input
-    public double calcVariance(double array[]){
-        double mean = calcMean(array);
-        double sum = 0;
-        for(double d : array)
-            sum += (d - mean)*(d - mean);
-        return sum/(array.length - 1);
-    }
-
-    // Calculates the standard deviation of the input
-    public double calcStdDev(double array[]){
-        return Math.sqrt(calcVariance(array));
-    }
-
-    public void error(String message){
-        System.out.println("ERROR: " + message);
-        System.exit(-1);
     }
 }
