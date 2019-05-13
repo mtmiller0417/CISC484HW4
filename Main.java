@@ -3,18 +3,19 @@ import java.awt.*;
 import java.util.*;
 public class Main{
     String fileName = "em_data.txt";
-    Double data[]; // Holds the data
+    double data[]; // Holds the data
 
     public static void main(String [] args){
         Main m = new Main(args);
     }
 
     public Main(String [] args){
-        data = readInFile(); // Read in data
+        readInFile(); // Read in data
         System.out.println("Read in " + data.length + " data points");
+        System.out.println("Mean is " + calcMean(data));
     }
 
-    public Double[] readInFile(){
+    public void readInFile(){
         BufferedReader reader;
         ArrayList<Double> tmpArray = new ArrayList<Double>();
 		try {
@@ -28,6 +29,18 @@ public class Main{
 		} catch (IOException e) {
 			e.printStackTrace();
         }
-        return (Double [])tmpArray.toArray(new Double[tmpArray.size()]); // Return array version of tmpArray arrayList
+        data = new double[tmpArray.size()];
+        for(int i = 0; i < tmpArray.size(); i++){
+            data[i] = tmpArray.get(i);
+        }
+    }
+
+    public double calcMean(double array[]){
+        double sum = 0;
+        int length = array.length;
+        for(Double d : array)
+            sum += d;
+
+        return (sum/length);
     }
 }
