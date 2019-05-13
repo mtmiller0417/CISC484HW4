@@ -16,38 +16,38 @@ public class Main{
         readInFile(); // Read in data
         System.out.println("Read in " + data.length + " data points");
         System.out.println("Mean is " + calcMean(data));
-	initializeMV();
-	for(int i = 0; i < k; i++)
-		System.out.println("Mean : "+ means[i] + " variance: " + v[i]);
+		initializeMV();
+		for(int i = 0; i < k; i++)
+			System.out.println("Mean : "+ means[i] + " variance: " + v[i]);
     }
 
     public void initializeMV(){
-	means = new double[k];
-	v = new double[k];
+		means = new double[k];
+		v = new double[k];
 
-	double min = data[0];
-	double max = data[0];
-	for(int i =0; i < data.length; i++){
-		if (data[i] > max)
-			max =  data[i];
-		else if (data[i] < min)
-			min = data[i]; 
-	}
-
-	Random r = new Random();
-	for(int j = 0; j < k; j++){
-		means[j] = r.nextDouble()*(max - min)  + min;
-	}
-
-	for(int j = 0; j < k; j++){
-		v[j] = 0;
-		double sum = 0;
-		for (int i = 0; i < data.length; i++){
-			double diff = Math.pow((data[i] - means[j]), 2);
-			sum += diff;
+		double min = data[0];
+		double max = data[0];
+		for(int i =0; i < data.length; i++){
+			if (data[i] > max)
+				max =  data[i];
+			else if (data[i] < min)
+				min = data[i]; 
 		}
-		v[j] = sum/(data.length -  1);
-	} 
+
+		Random r = new Random();
+		for(int j = 0; j < k; j++){
+			means[j] = r.nextDouble()*(max - min)  + min;
+		}
+
+		for(int j = 0; j < k; j++){
+			v[j] = 0;
+			double sum = 0;
+			for (int i = 0; i < data.length; i++){
+				double diff = Math.pow((data[i] - means[j]), 2);
+				sum += diff;
+			}
+			v[j] = sum/(data.length -  1);
+		} 
     }
     public void readInFile(){
         BufferedReader reader;
