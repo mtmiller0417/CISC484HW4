@@ -13,7 +13,14 @@ public class Main{
     }
 
     public Main(String [] args){
-        readInFile(); // Read in data
+
+		if(args.length != 2)
+			error("Incorrect usage! Correct usage:\njava Main <filePath> <K>");
+		fileName = args[0];
+		k = Integer.parseInt(args[1]);
+
+		readInFile(); // Read in data
+		System.out.println("K = " + k);
         System.out.println("Read in " + data.length + " data points");
         System.out.println("Mean is " + calcMean(data));
 		initializeMV();
@@ -76,5 +83,10 @@ public class Main{
             sum += d;
 
         return (sum/length);
-    }
+	}
+	
+	public void error(String message){
+		System.out.println("ERROR: " + message);
+		System.exit(-1);
+	}
 }
