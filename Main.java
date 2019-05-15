@@ -13,6 +13,8 @@ public class Main{
 	double nk[];
 	double w[][];
 	double density[][];
+	double m_old[];
+	double v_old[];
 
 	public static void main(String [] args){
         	Main m = new Main(args);
@@ -40,16 +42,42 @@ public class Main{
 		nk = new double[k];
 		w = new double[n][k];
 		density = new double[n][k];
+		m_old = new double[k];
+		v_old = new double[k];
+		System.out.println("Starting EM");
+		int count =  0;
+		do {	
+			fill_density();
+			e_step();
+			m_step();
+			count++;
+		} while ((!converge()) && (count<10000));
 
-		fill_density();
-		e_step();
-		m_step();
+		if (count >= 10000)
+			System.out.println("Did not converge, hit 10000 iterations.");
 
 		for(int i = 0; i < k; i++)
 			System.out.println("Mean : "+ means[i] + " variance: " + v[i]);
+	
+		System.out.println("Iterations: " + count);
 
 	}
 
+	public boolean almostEqual(double a, double b){
+		double c = Math.abs(a-b);
+		if (c < 0.0001)
+			return true;
+		else 
+			return false;
+	}
+
+	public boolean converge(){
+		for(int j = 0; j <k; j++)
+			if (!almostEqual(m_old[j], means[j]) || !almostEqual(v_old[j], v[j]))
+				return false;
+	
+		return true;
+	}
 	public void e_step(){
 		for(int i = 0; i < n; i++){
 			double denominator = 0;
@@ -58,7 +86,7 @@ public class Main{
 			for(int j = 0; j < k; j++)
 				w[i][j] = density[i][j]*alphak[j]/denominator;
 		}
-		System.out.println("e_step!");		
+		//System.out.println("e_step!");		
 	}
 
 	public void m_step(){
@@ -72,14 +100,16 @@ public class Main{
 			}
 			nk[j] = n_sum;
 			alphak[j] = nk[j]/n;
+			m_old[j] = means[j];
 			means[j] = m_sum/nk[j];
 
 			for(int i = 0; i < n; i++){
 				v_sum += (w[i][j]*Math.pow((data[i] - means[j]),2));
 			}
+			v_old[j] = v[j];
 			v[j] = v_sum/nk[j];
 		}
-		System.out.println("m_step!");
+		//System.out.println("m_step!");
 	}
 
 	public void fill_density(){
@@ -87,7 +117,7 @@ public class Main{
 			for(int i = 0; i < n; i++){
 				density[i][j] = calcPrDensity(data[i], means[j], v[j]);
 			}
-		System.out.println("filled density!");
+		//System.out.println("filled density!");
 	}
 	
 
