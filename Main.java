@@ -3,12 +3,12 @@ import java.awt.*;
 import java.util.*;
 
 public class Main{
-    	String fileName = "em_data.txt";
-    	double data[]; // Holds the data
-    	int k = 2;
+    String fileName = "em_data.txt";
+    double data[]; // Holds the data
+    int k = 2;
 	int n;
-    	double means[]; //Holds k means
-    	double v[]; //holds k variances
+    double means[]; //Holds k means
+    double v[]; //holds k variances
 	double alphak[];
 	double nk[];
 	double w[][];
@@ -29,8 +29,8 @@ public class Main{
 		readInFile(); // Read in data
 		n = data.length;
 		System.out.println("K = " + k);
-	        System.out.println("Read in " + data.length + " data points");
-        	System.out.println("Mean is " + calcMean(data));
+	    System.out.println("Read in " + data.length + " data points");
+        System.out.println("Mean is " + calcMean(data));
 		initializeMV();
 		for(int i = 0; i < k; i++)
 			System.out.println("Mean : "+ means[i] + " variance: " + v[i]);
@@ -61,7 +61,55 @@ public class Main{
 	
 		System.out.println("Iterations: " + count);
 
+		finalPart();
+
 	}
+
+	public void finalPart(){
+		System.out.println("Setting Variances to 1 and learning the k means");
+		initializeMV(); // Reinitialize the means randomly
+		setVarsToOne(); // Set the variances to 1, they will stay that way as we know this is the 'truth'
+		int count =  0;
+		do {	
+			fill_density();
+			e_step();
+			m_step_2();
+			count++;
+		} while ((!converge_2()) && (count<10000));
+		if (count >= 10000)
+			System.out.println("Did not converge, hit 10000 iterations.");
+
+		for(int i = 0; i < k; i++)
+			System.out.println("Mean : "+ means[i] + " variance: " + v[i]);
+	
+		System.out.println("Iterations: " + count);
+	}
+
+	// The m step used during step 3
+	public void m_step_2(){
+		for(int j = 0; j < k; j++){
+			double n_sum = 0;
+			double m_sum = 0;
+			double v_sum = 0;
+			for(int i = 0; i < n; i++){
+				n_sum += w[i][j];
+				m_sum += (w[i][j]*data[i]);
+			}
+			nk[j] = n_sum;
+			alphak[j] = nk[j]/n;
+			m_old[j] = means[j];
+			means[j] = m_sum/nk[j];
+		}
+		//System.out.println("m_step!");
+	}
+
+	// Sets the variances to 1
+	public void setVarsToOne(){
+		// Set all k variances to 1 
+		for(int i = 0; i < k; i++)
+			v[i] = 1.0;
+		// Variances shouldnt change during e/m bc we know them to be 1
+	}		
 
 	public boolean almostEqual(double a, double b){
 		double c = Math.abs(a-b);
@@ -78,6 +126,15 @@ public class Main{
 	
 		return true;
 	}
+
+	public boolean converge_2(){
+		for(int j = 0; j <k; j++)
+			if (!almostEqual(m_old[j], means[j]))
+				return false;
+
+		return true;
+	}
+
 	public void e_step(){
 		for(int i = 0; i < n; i++){
 			double denominator = 0;
@@ -121,7 +178,7 @@ public class Main{
 	}
 	
 
-    	public void initializeMV(){
+    public void initializeMV(){
 		means = new double[k];
 		v = new double[k];
 
@@ -148,14 +205,14 @@ public class Main{
 			}
 			v[j] = sum/(data.length -  1);
 		} 
-    	}
+    }
 
     	public void readInFile(){
         	BufferedReader reader;
         	ArrayList<Double> tmpArray = new ArrayList<Double>();
-		try {
-			reader = new BufferedReader(new FileReader(fileName));
-			String line = reader.readLine();
+			try {
+				reader = new BufferedReader(new FileReader(fileName));
+				String line = reader.readLine();
 			while (line != null) { // Continue to read in lines as long as they exist
                 		tmpArray.add(Double.parseDouble(line)); // Add double to  the tmpArray
 				line = reader.readLine(); // Read in next line
