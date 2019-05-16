@@ -9,4 +9,6 @@ I think the true k is k = 3. When run every time, although the initial 3 means a
 to the same 3 means and variances.
 
 (Extra Credit): During our E-step we multiply the numerator and denominator by alpha, while we do not do that in the 
-slides.
+slides. Initially the sum of all alphas equals 1, but then each alpha is replaced by the mean of each weights corresponding to each
+k in subsequent iterations. This ensures when estimating the new weights, that the weights change less than they otherwise would have. 
+with the alpha pulling the updating back a little bit.
