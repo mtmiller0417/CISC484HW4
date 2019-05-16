@@ -1,6 +1,23 @@
 Aashaka Desai, Jack Maloy, Matthew Miller					CISC 484 HW 4 
 
 
+OUTPUT: 
+  k = 1:
+    Mean: 15.48169  Variance: 67.51493
+    
+  k = 3:
+    Mean:  5.50927  Variance: 0.99809
+    Mean: 15.44916  Variance: 0.96711
+    Mean: 25.48665  Variance: 1.03025
+    
+  k = 5: // Output varies some depending on the randomized initial parameters
+    Mean:  4.50189   Variance: 0.53050
+    Mean:  5.87407   Variance: 0.71066
+    Mean: 15.15170  Variance: 1.03307
+    Mean: 15.62763  Variance: 0.84259
+    Mean: 25.48665  Variance: 0.99809
+        
+
 For initialization, we generated the k random means as k random number between the smallest number and largest number in the 
 dataset, then calculated their variance according to each of their randomly generated means. The results are sometimes sensitive 
 to the initial values, but that depends on the value of k.
