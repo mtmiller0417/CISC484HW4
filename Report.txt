@@ -1,8 +1,8 @@
 Aashaka Desai, Jack Maloy, Matthew Miller					CISC 484 HW 4 
 
 
-For initialization, we generated k random numbers between the smallest number and largest number in the dataset, then 
-calculated their variance according to each of their randomly generated means. The results are sometimes sensitive to 
+For initialization, we generated the k random means as k random number between the smallest number and largest number in the dataset, 
+then calculated their variance according to each of their randomly generated means. The results are sometimes sensitive to 
 the initial values, but that depends on the value of k.
 
 I think the true k is k = 3. When run every time, although the initial 3 means are wildly different, it always converges 
