@@ -6,7 +6,8 @@ dataset, then calculated their variance according to each of their randomly gene
 to the initial values, but that depends on the value of k.
 
 I think the true k is k = 3. When run every time, although the initial 3 means are wildly different, it always converges 
-to the same 3 means and variances.
+to the same 3 means and variances. Also for 'Step 3' that test also always converges to the same 3 means, which gives us further
+confidence that the true k is indeed 3.
 
 (Extra Credit): During our E-step we multiply the numerator and denominator by alpha, while we do not do that in the slides. 
 Initially the sum of all alphas equals 1, but then each alpha is replaced by the mean of each weights corresponding to each k in
